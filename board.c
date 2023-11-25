@@ -84,7 +84,10 @@ int board_stepShark(void)
 		
 	}
 	
+	//printf() 움직인 거리/ 이동... 
 	shark_position += step;
+ 	//printf();
+
 	
 	return shark_position;
 	
