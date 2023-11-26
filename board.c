@@ -50,7 +50,7 @@ int board_printBoardStatus(void)
     {
         printf("|");
         if (board_status[i] == BOARDSTATUS_NOK)
-            printf("X");
+            printf("");
         else
             printf("O");
     }   
@@ -84,11 +84,10 @@ int board_stepShark(void)
 		
 	}
 	
-	//printf() 움직인 거리/ 이동... 
 	shark_position += step;
  	//printf();
 
 	
-	return shark_position;
+	return step;
 	
 }

@@ -37,7 +37,7 @@ int rolldie(void)
 void printPlayerPosition(int player)
 {
 	int i;
-for(i=0;i<N_BOARD;i++)
+	for(i=0;i<N_BOARD;i++)
 {
 	printf("|");
 	if(i == player_position[player])
@@ -74,7 +74,7 @@ void checkDie(void)
 {
 	int i;
 	for(i=0;i<N_PLAYER;i++)
-		if(board_getBoardStatus(player_position[i] == BOARDSTATUS_NOK))
+		if(board_getBoardStatus(player_position[i]) == BOARDSTATUS_NOK)
 			player_status[i] = PLAYERSTATUS_DIE;
 
 }
@@ -89,8 +89,9 @@ int game_end(void)
 	{
 		if(player_status[i] == PLAYERSTATUS_LIVE)
 		{
+			flag_end = 1;
+		} else {
 			flag_end = 0;
-			break;
 		}
 	}
 	
@@ -160,7 +161,6 @@ int main(int argc, char *argv[])
     int step;
     int coinResult;
     char c;
-    
     if(player_status[turn] != PLAYERSTATUS_LIVE)
 	{
 	turn = (turn + 1)%N_PLAYER;
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     board_printBoardStatus();
      
     for(i=0;i<N_PLAYER;i++)
-    printPlayerPosition(i);
+    	printPlayerPosition(i);
     printPlayerStatus();
 
 
@@ -191,41 +191,33 @@ int main(int argc, char *argv[])
     player_position[turn] += step;
     if(player_position[turn] >= N_BOARD)
      {
-	 	player_position[turn = N_BOARD - 1];
+	 	player_position[turn] = N_BOARD - 1;
 	
 	 } 
 	 if(player_position[turn] == N_BOARD -1)
 	 	player_status[turn] = PLAYERSTATUS_END;
-     printf("Die result : %i, %s moved to %i!\n", board_stepShark(), player_name[turn],player_position[turn]);//움직이는 칸수가 계속 저장되서 늘어남.. 
-   
-    
-    
+     
     //2-4. 동전 줍기
 	 coinResult = board_getBoardCoin(pos);
+	 pos+=1;
 	 player_coin[turn] += coinResult;
-	 
-	 if(coinResult != 0);
+	 printf("Die result : %i, %s moved to %i!\n",  board_stepShark(), player_name[turn], step);
+	 if(coinResult != 0)
 	 {
 	 	printf( "-> Lucky! %s got %i coins\n",player_name[turn], coinResult );
 	 }
 	
-	 
-	 
-	 
+	checkDie();
+	//if(game_end() == 0)
+	{
+		//상어 동작 
+		getAlivePlayer();
+		getWinner();
+		printf("game end");	   	
+	}
+	
     //2-5. 다음턴
     turn = (turn +1)%N_PLAYER;	
-    //2-6. if (조건:모든 플레이어가 한번씩 턴을 돔)
-
-       if(turn == 0)
-	   {
-	   		//상어 동작 
-	   		int shark_pos = board_stepShark();
-	   		//printf(", %s moved to %i!\n",  player_name[turn],player_position[turn]);
-			checkDie();
-			   	
-	   }
-	   
-	   
 } while(1);
   //3. 정리 (승자 계산, 출력 등) 
   
